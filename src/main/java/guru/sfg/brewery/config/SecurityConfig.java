@@ -1,8 +1,10 @@
 package guru.sfg.brewery.config;
 
+import guru.sfg.brewery.security.JpaUserDetailsService;
 import guru.sfg.brewery.security.RestHeaderAuthFilter;
 import guru.sfg.brewery.security.RestUrlAuthFilter;
 import guru.sfg.brewery.security.SfgPasswordEncodersFactories;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -86,19 +88,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new InMemoryUserDetailsManager(admin, user);
 //    }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("spring")
-                .password("{bcrypt}$2a$10$UPwkptmTCOMnWNm6H/n.muJ4jzl7AnDVz67fbshdJY8mTFB/32R5O")
-                .roles("ADMIN")
-                .and()
-                .withUser("user")
-                .password("{sha256}e5cfcda30caf0ea2dc6ee3854fc98c1e386a0c4cee55fb5539b5e6e0c5a6a9cf0dca37018e67d2ce")
-                .roles("USER")
-                .and()
-                .withUser("scoott")
-                .password("{bcrypt15}$2a$15$d6px.rFY7RRQdDVOYJtlrumjLGDhyB0qhufSrVHyMuhUdeKndR312")
-                .roles("CUSTOMER");
-    }
+//    @Autowired
+//    JpaUserDetailsService jpaUserDetailsService;
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(this.jpaUserDetailsService).passwordEncoder(passwordEncoder());
+
+//        auth.inMemoryAuthentication()
+//                .withUser("spring")
+//                .password("{bcrypt}$2a$10$UPwkptmTCOMnWNm6H/n.muJ4jzl7AnDVz67fbshdJY8mTFB/32R5O")
+//                .roles("ADMIN")
+//                .and()
+//                .withUser("user")
+//                .password("{sha256}e5cfcda30caf0ea2dc6ee3854fc98c1e386a0c4cee55fb5539b5e6e0c5a6a9cf0dca37018e67d2ce")
+//                .roles("USER")
+//                .and()
+//                .withUser("scoott")
+//                .password("{bcrypt15}$2a$15$d6px.rFY7RRQdDVOYJtlrumjLGDhyB0qhufSrVHyMuhUdeKndR312")
+//                .roles("CUSTOMER");
+//    }
 }
