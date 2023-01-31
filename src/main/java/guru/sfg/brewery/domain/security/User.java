@@ -27,8 +27,8 @@ public class User implements UserDetails, CredentialsContainer {
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+        joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+        inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
     private Set<Role> roles;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -50,38 +50,38 @@ public class User implements UserDetails, CredentialsContainer {
 
     @Override
     public boolean isAccountNonExpired() {
-        return accountNonExpired;
+        return this.accountNonExpired;
     }
 
 
     @Override
     public boolean isAccountNonLocked() {
-        return accountNonLocked;
+        return this.accountNonLocked;
     }
 
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
+        return this.credentialsNonExpired;
     }
 
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return this.enabled;
     }
 
     @Builder.Default
-    private boolean accountNonExpired = true;
+    private Boolean accountNonExpired = true;
 
     @Builder.Default
-    private boolean accountNonLocked = true;
+    private Boolean accountNonLocked = true;
 
     @Builder.Default
-    private boolean credentialsNonExpired = true;
+    private Boolean credentialsNonExpired = true;
 
     @Builder.Default
-    private boolean enabled = true;
+    private Boolean enabled = true;
 
     @Override
     public void eraseCredentials() {

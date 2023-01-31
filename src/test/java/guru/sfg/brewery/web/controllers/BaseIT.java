@@ -39,7 +39,7 @@ public abstract class BaseIT {
 //    BeerService beerService;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
