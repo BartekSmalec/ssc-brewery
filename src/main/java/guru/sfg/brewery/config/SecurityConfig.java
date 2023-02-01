@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(restUrlAuthFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);*/
 
-        http.csrf().disable();
+        //http.csrf().disable();
 
         http
                 .authorizeRequests(authorize -> {
@@ -64,7 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().and()
-                .httpBasic();
+                .httpBasic()
+                .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
 
         // for h2-database to work with spring security
         http.headers().frameOptions().sameOrigin();
