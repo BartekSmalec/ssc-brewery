@@ -24,8 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,10 +62,10 @@ class BeerOrderControllerTest extends BaseIT {
         BeerOrderDto beerOrderDto = buildOrderDto(stPeteCustomer, loadedBeers.get(0).getId());
 
         mockMvc.perform(post(API_ROOT + stPeteCustomer.getId() + "/orders")
-                .accept(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beerOrderDto)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderDto)))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -76,10 +75,10 @@ class BeerOrderControllerTest extends BaseIT {
         BeerOrderDto beerOrderDto = buildOrderDto(stPeteCustomer, loadedBeers.get(0).getId());
 
         mockMvc.perform(post(API_ROOT + stPeteCustomer.getId() + "/orders")
-                .accept(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beerOrderDto)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderDto)))
                 .andExpect(status().isCreated());
     }
 
@@ -89,10 +88,10 @@ class BeerOrderControllerTest extends BaseIT {
         BeerOrderDto beerOrderDto = buildOrderDto(stPeteCustomer, loadedBeers.get(0).getId());
 
         mockMvc.perform(post(API_ROOT + stPeteCustomer.getId() + "/orders")
-                .accept(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beerOrderDto)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderDto)))
                 .andExpect(status().isCreated());
     }
 
@@ -102,10 +101,10 @@ class BeerOrderControllerTest extends BaseIT {
         BeerOrderDto beerOrderDto = buildOrderDto(stPeteCustomer, loadedBeers.get(0).getId());
 
         mockMvc.perform(post(API_ROOT + stPeteCustomer.getId() + "/orders")
-                .accept(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beerOrderDto)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerOrderDto)))
                 .andExpect(status().isForbidden());
     }
 
@@ -182,24 +181,43 @@ class BeerOrderControllerTest extends BaseIT {
                 .andExpect(status().isForbidden());
     }
 
-    @Disabled
+    @Transactional
     @Test
-    void pickUpOrderNotAuth() {
+    void pickUpOrderNotAuth() throws Exception {
+        BeerOrder beerOrder = stPeteCustomer.getBeerOrders().stream().findFirst().orElseThrow();
+
+        mockMvc.perform(put(API_ROOT + stPeteCustomer.getId() + "/orders/" + beerOrder.getId() + "/pickup"))
+                .andExpect(status().isUnauthorized());
     }
 
-    @Disabled
+    @Transactional
+    @WithUserDetails("spring")
     @Test
-    void pickUpOrderNotAdminUser() {
+    void pickUpOrderNotAdminUser() throws Exception {
+        BeerOrder beerOrder = stPeteCustomer.getBeerOrders().stream().findFirst().orElseThrow();
+
+        mockMvc.perform(put(API_ROOT + stPeteCustomer.getId() + "/orders/" + beerOrder.getId() + "/pickup"))
+                .andExpect(status().isNoContent());
     }
 
-    @Disabled
+    @Transactional
+    @WithUserDetails(DefaultBreweryLoader.STPETE_USER)
     @Test
-    void pickUpOrderCustomerUserAUTH() {
+    void pickUpOrderCustomerUserAUTH() throws Exception {
+        BeerOrder beerOrder = stPeteCustomer.getBeerOrders().stream().findFirst().orElseThrow();
+
+        mockMvc.perform(put(API_ROOT + stPeteCustomer.getId() + "/orders/" + beerOrder.getId() + "/pickup"))
+                .andExpect(status().isNoContent());
     }
 
-    @Disabled
+    @Transactional
+    @WithUserDetails(DefaultBreweryLoader.DUNEDIN_USER)
     @Test
-    void pickUpOrderCustomerUserNOT_AUTH() {
+    void pickUpOrderCustomerUserNOT_AUTH() throws Exception {
+        BeerOrder beerOrder = stPeteCustomer.getBeerOrders().stream().findFirst().orElseThrow();
+
+        mockMvc.perform(put(API_ROOT + stPeteCustomer.getId() + "/orders/" + beerOrder.getId() + "/pickup"))
+                .andExpect(status().isForbidden());
     }
 
     private BeerOrderDto buildOrderDto(Customer customer, UUID beerId) {
