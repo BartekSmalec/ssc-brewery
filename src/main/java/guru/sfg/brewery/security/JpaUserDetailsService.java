@@ -21,9 +21,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         log.debug("Getting user info via JPA");
 
-        return userRepository.findByUsername(username).orElseThrow(() -> {
-            return new UsernameNotFoundException("User name: " + username + " not found");
-        });
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User name: " + username + " not found"));
 
     }
 
